@@ -1,7 +1,19 @@
 FROM python:3.8-slim-buster
 
 # Install required packages
-RUN pip install fastapi uvicorn numpy opencv-python torch torchvision
+RUN apt-get update && apt-get install -y --no-install-recommends \
+      bzip2 \
+      g++ \
+      git \
+      graphviz \
+      libgl1-mesa-glx \
+      libhdf5-dev \
+      openmpi-bin \
+      wget \
+      python3-tk && \
+    rm -rf /var/lib/apt/lists/*
+
+RUN pip install fastapi uvicorn numpy opencv-python torch torchvision python-multipart
 
 # Clone the GitHub repository
 RUN apt-get update && apt-get install -y git
@@ -11,10 +23,15 @@ RUN git clone https://github.com/KEROLIS/movenet-pytorch
 WORKDIR /movenet-pytorch
 
 # Install the project dependencies
-RUN pip install -r requirements.txt
+RUN pip install --upgrade pip
+RUN pip install --no-cache-dir -r requirements.txt
 
 # Copy the project files
 COPY . .
+
+# Minimize image size 
+RUN (apt-get autoremove -y; \
+     apt-get autoclean -y)
 
 # Load all the models
 RUN python -c "import movenet"
