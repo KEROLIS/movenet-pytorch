@@ -9,7 +9,7 @@ app = FastAPI()
 
 # Load the model
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-model = load_model("movenet_lightning", ft_size=48).to(device)
+model = load_model("movenet_thunder", ft_size=48).to(device)
 
 @app.post("/draw_keypoints")
 async def draw_keypoints(file: UploadFile, conf_thres: float = 0.3):
