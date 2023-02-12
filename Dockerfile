@@ -1,6 +1,6 @@
 FROM python:3.8-slim-buster
 
-# Install required packages
+# Install required packages (for opencv dependencies)
 RUN apt-get update && apt-get install -y --no-install-recommends \
       bzip2 \
       g++ \
@@ -25,9 +25,6 @@ WORKDIR /movenet-pytorch
 # Install the project dependencies
 RUN pip install --upgrade pip
 RUN pip install --no-cache-dir -r requirements.txt
-
-# Copy the project files
-COPY . .
 
 # Minimize image size 
 RUN (apt-get autoremove -y; \
